@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Volunteer</title>
 </head>
 <body>
-
+<h1 align="center">Volunteer at Hypothetical Bloodbank!</h1>
+<br/><br/>
+{ % if submitted % }
+    Congratulations! You have signed up to volunteer.
+{ % else % }
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ volForm.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+{ % endif % }
 </body>
 </html>

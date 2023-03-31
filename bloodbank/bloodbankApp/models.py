@@ -1,15 +1,21 @@
 from django.core.validators import *
 from django.db import models
 
-class BloodTypes(models.TextChoices):
-    a_pos = 'A+'
-    a_neg = 'A-'
-    b_pos = 'B+'
-    b_neg = 'B-'
-    o_pos = 'O+'
-    o_neg = 'O-'
-    ab_pos = 'AB+'
-    ab_neg = 'AB-'
+BLOOD_TYPES = [
+    ('A+', 'A+'),
+    ('A-', 'A-'),
+    ('B+', 'B+'),
+    ('B-', 'B-'),
+    ('O+', 'O+'),
+    ('O-', 'O-'),
+    ('AB+', 'AB+'),
+    ('AB-', 'AB-'),
+]
+
+YES_NO_CHOICE = [
+    (False, 'No'),
+    (True, 'Yes'),
+]
 
 class OperatingHours(models.Model):
     day = models.CharField(max_length=9, primary_key=True)
@@ -27,11 +33,11 @@ class Donor(models.Model):
     donor_id = models.AutoField(validators=[MinValueValidator(0)], primary_key=True)
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
-    blood_type = models.CharField(max_length=3, choices=BloodTypes.choices)
+    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
-    health_interview = models.BooleanField(default=False)
+    health_interview = models.BooleanField(choices=YES_NO_CHOICE)
     class Meta:
         db_table='Donor'
 
@@ -42,7 +48,7 @@ class Volunteer(models.Model):
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
-    training = models.BooleanField()
+    training = models.BooleanField(choices=YES_NO_CHOICE)
     class Meta:
         db_table='Volunteer'
 
@@ -50,7 +56,7 @@ class Patient(models.Model):
     patient_id = models.AutoField(validators=[MinValueValidator(0)], primary_key=True)
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
-    blood_type = models.CharField(max_length=3, choices=BloodTypes.choices)
+    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
     doctor_name = models.CharField(max_length=45)
@@ -77,7 +83,7 @@ class Donation(models.Model):
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
     volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
     staff = models.ForeignKey(StaffMember, on_delete=models.CASCADE)
-    blood_type = models.CharField(max_length=3, choices=BloodTypes.choices)
+    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)
     date_received = models.DateTimeField()
     class Meta:
         db_table='Donation'

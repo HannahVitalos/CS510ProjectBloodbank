@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from .models import *
 from .forms import *
 
 #views list: homepage (display bloodbank info, login button, donor signup button, volunteer signup button),
@@ -26,7 +25,8 @@ def donorSign(request):
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone_num']
             address = form.cleaned_data['address']
-            donor = Donor(first_name = fname, last_name = lname, blood_type = blood_type, email = email, phone_num = phone, address = address)
+            interview = form.cleaned_data['health_interview']
+            donor = Donor(first_name = fname, last_name = lname, blood_type = blood_type, email = email, phone_num = phone, address = address, health_interview = interview)
             donor.save()
             return HttpResponseRedirect('/donorsignup?submitted=True')
     else:
@@ -36,7 +36,25 @@ def donorSign(request):
     return render(request, "bloodbankApp/donorSignUp.html", {'form': form, 'submitted': submitted})
 
 def volunteer(request):
-    return render(request, "bloodbankApp/volunteer.html")
+    submitted = False
+    if request.method == "POST":
+        volForm = VolunteerForm(request.POST)
+        if volForm.is_valid():
+            fname = volForm.cleaned_data['first_name']
+            lname = volForm.cleaned_data['last_name']
+            email = volForm.cleaned_data['email']
+            phone = volForm.cleaned_data['phone_num']
+            address = volForm.cleaned_data['address']
+            train = volForm.cleaned_data['training']
+            vol = Volunteer(first_name=fname, last_name=lname, email=email, phone_num=phone,
+                          address=address, training=train)
+            vol.save()
+            return HttpResponseRedirect('/volunteersignup?submitted=True')
+    else:
+        volForm = VolunteerForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, "bloodbankApp/volunteer.html", {'volForm': volForm, 'submitted': submitted})
 
 def login(request):
     return render(request, "bloodbankApp/login.html")

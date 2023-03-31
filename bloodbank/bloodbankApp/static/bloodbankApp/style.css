@@ -1,0 +1,41 @@
+.signups {
+position: absolute;
+align-items: center;
+align-text: center;
+justify-content: space-evenly;
+top: 50%;
+left: 32%;
+}
+
+.vol-btn {
+width: 250px;
+height: 100px;
+color: black;
+font-size: 1.5rem;
+background-color: #1EC600;
+}
+
+.donor-btn {
+width: 250px;
+height: 100px;
+color: black;
+font-size: 1.5rem;
+background-color: #33D7FF;
+}
+
+.login-btn {
+width: 175px;
+height: 50px;
+color: black;
+font-size: 1.5rem;
+background-color: #DAF7A6;
+}
+
+.login {
+position: absolute;
+align-items: center;
+align-text: center;
+justify-content: space-evenly;
+top: 75%;
+left: 43%;
+}

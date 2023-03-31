@@ -3,11 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>homepage</title>
-    <style>
-
-    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bloodbankApp/style.css' %}">
 </head>
 <body>
 <h1 align="center">Welcome to Hypothetical Blood Donation Service</h1>
+<div align="left">
+ <h4 align="left">Contact Information</h4>
+    <table border="1">
+        <tr>
+            <th>Phone Number</th>
+            <th>Email</th>
+        </tr>
+        {% for item in bloodbank %}
+        <tr>
+            <td>{{item.phone_num}}</td>
+            <td>{{item.email}}</td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+<div align="center">
+ <h4 align="center">Our Hours</h4>
+    <table border="1">
+        <tr>
+            <th>Day</th>
+            <th>Hours</th>
+        </tr>
+        {% for item in hours %}
+        <tr>
+            <td>{{item.day}}</td>
+            <td>{{item.hours}}</td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+<div align="right">
+ <h4 align="right">Locations</h4>
+    <table border="1">
+        <tr>
+            <th>Address</th>
+        </tr>
+        {% for item in bloodbank %}
+        <tr>
+            <td>{{item.address}}</td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+<div class="signups">
+    <button class="vol-btn" type="submit"><a href="/volunteersignup">Volunteer Sign Up</a> </button>
+    <button class="donor-btn" type="submit"><a href="/donorsignup">Donor Sign Up</a> </button>
+</div>
+<div class="login">
+    <h4 align="center">For Staff Members</h4>
+    <button class="login-btn" type="submit"><a href="/login">Login</a> </button>
+</div>
 </body>
 </html>

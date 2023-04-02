@@ -1,0 +1,11 @@
+.content{
+    display: grid;
+    columns: 1fr;
+    width: 90vw;
+}
+
+.entry{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    width: 100%;
+}

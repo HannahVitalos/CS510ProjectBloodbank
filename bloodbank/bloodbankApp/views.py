@@ -1,18 +1,22 @@
-from django.shortcuts import render
+import datetime
+
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
+from django.contrib import messages
 
-#views list: homepage (display bloodbank info, login button, donor signup button, volunteer signup button),
-#login page, donor sign up page, volunteer sign up page, sign up success page
-#signed in views: donors list page, blood list page, patients list page, volunteers list page, recipients list page
+# views list: homepage (display bloodbank info, login button, donor signup button, volunteer signup button),
+# login page, donor sign up page, volunteer sign up page, sign up success page
+# signed in views: donors list page, blood list page, patients list page, volunteers list page, recipients list page
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 
 
 def index(request):
     bloodbank = BloodBank.objects.all().values()
     hours = OperatingHours.objects.all().values()
     return render(request, "bloodbankApp/index.html", {'bloodbank': bloodbank, 'hours': hours})
+
 
 def donorSign(request):
     submitted = False
@@ -26,7 +30,8 @@ def donorSign(request):
             phone = form.cleaned_data['phone_num']
             address = form.cleaned_data['address']
             interview = form.cleaned_data['health_interview']
-            donor = Donor(first_name = fname, last_name = lname, blood_type = blood_type, email = email, phone_num = phone, address = address, health_interview = interview)
+            donor = Donor(first_name=fname, last_name=lname, blood_type=blood_type, email=email, phone_num=phone,
+                          address=address, health_interview=interview)
             donor.save()
             return HttpResponseRedirect('/donorsignup?submitted=True')
     else:
@@ -35,26 +40,68 @@ def donorSign(request):
             submitted = True
     return render(request, "bloodbankApp/donorSignUp.html", {'form': form, 'submitted': submitted})
 
+
 def volunteer(request):
     submitted = False
     if request.method == "POST":
-        volForm = VolunteerForm(request.POST)
-        if volForm.is_valid():
-            fname = volForm.cleaned_data['first_name']
-            lname = volForm.cleaned_data['last_name']
-            email = volForm.cleaned_data['email']
-            phone = volForm.cleaned_data['phone_num']
-            address = volForm.cleaned_data['address']
-            train = volForm.cleaned_data['training']
+        vol_form = VolunteerForm(request.POST)
+        if vol_form.is_valid():
+            fname = vol_form.cleaned_data['first_name']
+            lname = vol_form.cleaned_data['last_name']
+            email = vol_form.cleaned_data['email']
+            phone = vol_form.cleaned_data['phone_num']
+            address = vol_form.cleaned_data['address']
+            train = vol_form.cleaned_data['training']
             vol = Volunteer(first_name=fname, last_name=lname, email=email, phone_num=phone,
-                          address=address, training=train)
+                            address=address, training=train)
             vol.save()
             return HttpResponseRedirect('/volunteersignup?submitted=True')
     else:
-        volForm = VolunteerForm
+        vol_form = VolunteerForm
         if 'submitted' in request.GET:
             submitted = True
-    return render(request, "bloodbankApp/volunteer.html", {'volForm': volForm, 'submitted': submitted})
+    return render(request, "bloodbankApp/volunteer.html", {'volForm': vol_form, 'submitted': submitted})
 
-def login(request):
-    return render(request, "bloodbankApp/login.html")
+
+def donation(request):
+    submitted = False
+    if request.method == "POST":
+        donation_form = DonationForm(request.POST)
+        if donation_form.is_valid():
+            donor = donation_form.cleaned_data['donor']
+            vol = donation_form.cleaned_data['volunteer']
+            staff = donation_form.cleaned_data['staff']
+            blood = donation_form.cleaned_data['blood_type']
+            current = datetime.datetime.now()
+            new_donation = Donation(donor=donor, volunteer=vol, staff=staff, blood_type=blood, date_received=current)
+            new_donation.save()
+            return HttpResponseRedirect('/adddonation?submitted=True')
+    else:
+        donation_form = DonationForm
+        if 'submitted' in request.GET:
+             submitted = True
+
+    return render(request, "bloodbankApp/donation.html", {'form': donation_form, 'submitted': submitted})
+
+
+def patient(request):
+    submitted = False
+    if request.method == "POST":
+        p_form = PatientForm(request.POST)
+        if p_form.is_valid():
+            fname = p_form.cleaned_data['first_name']
+            lname = p_form.cleaned_data['last_name']
+            blood = p_form.cleaned_data['blood_type']
+            email = p_form.cleaned_data['email']
+            phone = p_form.cleaned_data['phone_num']
+            doctor = p_form.cleaned_data['doctor_name']
+            notes = p_form.cleaned_data['medical_notes']
+            new_patient = Patient(first_name=fname, last_name=lname, blood_type=blood, email=email, phone_num=phone,
+                                  doctor_name=doctor, medical_notes=notes)
+            new_patient.save()
+            return HttpResponseRedirect('/volunteersignup?submitted=True')
+    else:
+        p_form = PatientForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, "bloodbankApp/patient.html", {'form': p_form, 'submitted': submitted})

@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DonorSignUp</title>
+    <title>Add Donation</title>
 </head>
 <body>
-<h1 align="center">Sign up to donate blood!</h1>
-<br/><br/>
 {% if submitted %}
-    Congratulations! You have signed up to donate.
+    Donation has successfully been entered into the database.
 {% else %}
     <form action="" method="post">
         {% csrf_token %}

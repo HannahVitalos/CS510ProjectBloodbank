@@ -17,9 +17,11 @@ YES_NO_CHOICE = [
     (True, 'Yes'),
 ]
 
+
 class OperatingHours(models.Model):
     day = models.CharField(max_length=9, primary_key=True)
     hours = models.CharField(max_length=13)
+
     class Meta:
         db_table='OperatingHours'
 class BloodBank(models.Model):
@@ -27,6 +29,7 @@ class BloodBank(models.Model):
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
+
     class Meta:
         db_table='Bloodbank'
 class Donor(models.Model):
@@ -38,8 +41,10 @@ class Donor(models.Model):
     phone_num = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
     health_interview = models.BooleanField(choices=YES_NO_CHOICE)
+
     class Meta:
-        db_table='Donor'
+        db_table = 'Donor'
+
 
 class Volunteer(models.Model):
     volunteer_id = models.AutoField(validators=[MinValueValidator(0)], primary_key=True)
@@ -49,8 +54,10 @@ class Volunteer(models.Model):
     phone_num = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
     training = models.BooleanField(choices=YES_NO_CHOICE)
+
     class Meta:
-        db_table='Volunteer'
+        db_table = 'Volunteer'
+
 
 class Patient(models.Model):
     patient_id = models.AutoField(validators=[MinValueValidator(0)], primary_key=True)
@@ -61,8 +68,10 @@ class Patient(models.Model):
     phone_num = models.CharField(max_length=45)
     doctor_name = models.CharField(max_length=45)
     medical_need = models.CharField(max_length=500)
+
     class Meta:
-        db_table='Patient'
+        db_table = 'Patient'
+
 
 class StaffMember(models.Model):
     staff_id = models.AutoField(validators=[MinValueValidator(0)], primary_key=True)
@@ -75,8 +84,10 @@ class StaffMember(models.Model):
     hours = models.IntegerField(validators=[MinValueValidator(10), MaxValueValidator(60)])
     salary = models.IntegerField(validators=[MinValueValidator(15000), MaxValueValidator(500000)])
     bloodbank_name = models.ForeignKey(BloodBank, on_delete=models.CASCADE)
+
     class Meta:
-        db_table='StaffMember'
+        db_table = 'StaffMember'
+
 
 class Donation(models.Model):
     donation_id = models.AutoField(validators=[MinValueValidator(0)], primary_key=True)
@@ -85,14 +96,17 @@ class Donation(models.Model):
     staff = models.ForeignKey(StaffMember, on_delete=models.CASCADE)
     blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)
     date_received = models.DateTimeField()
-    class Meta:
-        db_table='Donation'
 
-#class Receives(models.Model): come back
+    class Meta:
+        db_table = 'Donation'
+
+
+# class Receives(models.Model): come back
 
 class Login(models.Model):
     username = models.CharField(max_length=45, primary_key=True)
     password = models.CharField(max_length=45)
     staff = models.ForeignKey(StaffMember, on_delete=models.CASCADE)
+
     class Meta:
-        db_table='Login'
+        db_table = 'Login'

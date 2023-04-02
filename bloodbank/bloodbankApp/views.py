@@ -79,7 +79,7 @@ def donation(request):
     else:
         donation_form = DonationForm
         if 'submitted' in request.GET:
-             submitted = True
+            submitted = True
 
     return render(request, "bloodbankApp/donation.html", {'form': donation_form, 'submitted': submitted})
 
@@ -105,3 +105,28 @@ def patient(request):
         if 'submitted' in request.GET:
             submitted = True
     return render(request, "bloodbankApp/patient.html", {'form': p_form, 'submitted': submitted})
+
+
+def update(request, table_name, pri_k):
+    table = table_name
+    object = None
+    form = None
+    if table == 'donor':
+        object = Donor.objects.get(pk=pri_k)
+        form = DonorForm(request.POST or None, instance=object)
+    elif table == 'volunteer':
+        object = Volunteer.objects.get(pk=pri_k)
+        form = VolunteerForm(request.POST or None, instance=object)
+    elif table == 'patient':
+        object = Patient.objects.get(pk=pri_k)
+        form = PatientForm(request.POST or None, instance=object)
+    elif table == 'staffmember':
+        object = StaffMember.objects.get(pk=pri_k)
+        form = StaffMemberForm(request.POST or None, instance=object)
+    elif table == 'donation':
+        object = Donation.objects.get(pk=pri_k)
+        form = DonationForm(request.POST or None, instance=object)
+    if form.is_valid():
+        form.save()
+        return redirect('table', table_name=table_name)
+    return render(request, "update.html", {'table_name': table_name, 'pri_k': pri_k, 'object': object, 'form': form})

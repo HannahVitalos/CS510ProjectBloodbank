@@ -10,4 +10,5 @@ urlpatterns = [
     path(r'table/<str:table_name>',views.show_table, name='table'),
     path(r'adddonation/', views.donation, name='donation'),
     path(r'addpatient/', views.patient, name='patient'),
+    path(r'update/<str:table_name>/<int:pri_k>', views.update, name='update')
 ]

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Show Table</title>
-
+    {% load bloodbank_filters %}
 </head>
 <body>
 <h1>{{table_name}}s</h1>
@@ -19,7 +19,7 @@
                 </tr>
         {% endfor %}
         <tr>
-            <td><button type="submit"><a href="/update/<str:table_name>">Update</a> </button></td>
+            <td><button type="submit"><a href="/update/{{ table_name }}/{{ entry|get_primary_key:entry }}">Update</a> </button></td>
         </tr>
     {% endfor %}
     </table>

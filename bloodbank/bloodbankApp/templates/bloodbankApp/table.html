@@ -6,30 +6,37 @@
     {% load bloodbank_filters %}
 </head>
 <body>
-<h1 align="center">{{table_name}}s</h1>
-<div align="center">
-    <form action="/search/{{ table_name }}">
-    <input type="text" placeholder="Search..." name="to_find">
-    <button type="submit">Go</button>
-    </form>
-</div>
-<div class="content">
-    <table border="1" align="center">
-    {% for entry in objects %}
-        {% for key, value in entry.items %}
+{% if user.is_authenticated %}
+    <h1 align="center">{{table_name}}s</h1>
+    <div align="center">
+        <form action="/search/{{ table_name }}">
+        <input type="text" placeholder="Search..." name="to_find">
+        <button type="submit">Go</button>
+        </form>
+    </div>
+    <div class="content">
+        <table border="1" align="center">
+        {% for entry in objects %}
+            {% for key, value in entry.items %}
                 <tr>
                     <th>{{ key }}</th>
                 </tr>
                 <tr>
                     <td>{{ value }}</td>
                 </tr>
+            {% endfor %}
+            <tr>
+                <td><button type="submit"><a href="/update/{{ table_name }}/{{ entry|get_primary_key:entry }}">Update</a> </button></td>
+                <td><button type="submit"><a href="/remove/{{ table_name }}/{{ entry|get_primary_key:entry }}">Remove</a> </button></td>
+            </tr>
         {% endfor %}
-        <tr>
-            <td><button type="submit"><a href="/update/{{ table_name }}/{{ entry|get_primary_key:entry }}">Update</a> </button></td>
-            <td><button type="submit"><a href="/remove/{{ table_name }}/{{ entry|get_primary_key:entry }}">Remove</a> </button></td>
-        </tr>
-    {% endfor %}
-    </table>
-</div>
-    </body>
+        </table>
+        <button type="submit"><a href='/'>Return Home</a> </button>
+    </div>
+{% else %}
+    <div align="center">
+        <h1>You must log in to view this page.</h1>
+    </div>
+{% endif %}
+</body>
 </html>

@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -11,6 +12,27 @@ from django.contrib import messages
 # signed in views: donors list page, blood list page, patients list page, volunteers list page, recipients list page
 
 from django.http import HttpResponseRedirect
+
+
+def signin(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            fname = user.first_name
+            return render(request, "bloodbankApp/index.html", {"fname": fname})
+        else:
+            #messages.error(request, "Login failed: invalid username or password")
+            redirect('home')
+    return render(request, "login.html")
+
+
+def signout(request):
+    logout(request)
+    #message success here
+    return redirect('home')
 
 
 def index(request):
@@ -64,6 +86,7 @@ def volunteer(request):
     return render(request, "bloodbankApp/volunteer.html", {'volForm': vol_form, 'submitted': submitted})
 
 
+@login_required
 def donation(request):
     submitted = False
     if request.method == "POST":
@@ -85,6 +108,7 @@ def donation(request):
     return render(request, "bloodbankApp/donation.html", {'form': donation_form, 'submitted': submitted})
 
 
+@login_required
 def patient(request):
     submitted = False
     if request.method == "POST":
@@ -108,6 +132,7 @@ def patient(request):
     return render(request, "bloodbankApp/patient.html", {'form': p_form, 'submitted': submitted})
 
 
+@login_required
 def update(request, table_name, pri_k):
     table = table_name
     item = None
@@ -133,6 +158,7 @@ def update(request, table_name, pri_k):
     return render(request, "update.html", {'table_name': table_name, 'pri_k': pri_k, 'object': item, 'form': form})
 
 
+@login_required
 def remove(request, table_name, pri_k):
     table_name = table_name
     table = None
@@ -158,6 +184,7 @@ def remove(request, table_name, pri_k):
     return render(request, "table.html", {'table_name': table_name, 'pri_k': pri_k, 'object': item})
 
 
+@login_required
 def search(request, table_name):
     table_name = table_name
     items = None

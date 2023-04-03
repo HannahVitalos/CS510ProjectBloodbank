@@ -2,18 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Show Table</title>
+    <title>Search</title>
     {% load bloodbank_filters %}
 </head>
 <body>
-<h1 align="center">{{table_name}}s</h1>
-<div align="center">
-    <form action="/search/{{ table_name }}">
-    <input type="text" placeholder="Search..." name="to_find">
-    <button type="submit">Go</button>
-    </form>
-</div>
-<div class="content">
+{% if to_find %}
+    <h1 align="center">Search Results</h1>
     <table border="1" align="center">
     {% for entry in objects %}
         {% for key, value in entry.items %}
@@ -30,6 +24,8 @@
         </tr>
     {% endfor %}
     </table>
-</div>
-    </body>
+{% else %}
+    <h1 align="center">There were no items in {{ table_name }} matching "{{ to_find }}"</h1>
+{% endif %}
+</body>
 </html>

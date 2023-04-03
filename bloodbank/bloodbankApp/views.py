@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -109,24 +110,93 @@ def patient(request):
 
 def update(request, table_name, pri_k):
     table = table_name
-    object = None
+    item = None
     form = None
     if table == 'donor':
-        object = Donor.objects.get(pk=pri_k)
-        form = DonorForm(request.POST or None, instance=object)
+        item = Donor.objects.get(pk=pri_k)
+        form = DonorForm(request.POST or None, instance=item)
     elif table == 'volunteer':
-        object = Volunteer.objects.get(pk=pri_k)
-        form = VolunteerForm(request.POST or None, instance=object)
+        item = Volunteer.objects.get(pk=pri_k)
+        form = VolunteerForm(request.POST or None, instance=item)
     elif table == 'patient':
-        object = Patient.objects.get(pk=pri_k)
-        form = PatientForm(request.POST or None, instance=object)
+        item = Patient.objects.get(pk=pri_k)
+        form = PatientForm(request.POST or None, instance=item)
     elif table == 'staffmember':
-        object = StaffMember.objects.get(pk=pri_k)
-        form = StaffMemberForm(request.POST or None, instance=object)
+        item = StaffMember.objects.get(pk=pri_k)
+        form = StaffMemberForm(request.POST or None, instance=item)
     elif table == 'donation':
-        object = Donation.objects.get(pk=pri_k)
-        form = DonationForm(request.POST or None, instance=object)
+        item = Donation.objects.get(pk=pri_k)
+        form = DonationForm(request.POST or None, instance=item)
     if form.is_valid():
         form.save()
         return redirect('table', table_name=table_name)
-    return render(request, "update.html", {'table_name': table_name, 'pri_k': pri_k, 'object': object, 'form': form})
+    return render(request, "update.html", {'table_name': table_name, 'pri_k': pri_k, 'object': item, 'form': form})
+
+
+def remove(request, table_name, pri_k):
+    table_name = table_name
+    table = None
+    item = None
+    if table_name == 'donor':
+        table = Donor
+    elif table_name == 'volunteer':
+        table = Volunteer
+    elif table_name == 'patient':
+        table = Patient
+    elif table_name == 'staffmember':
+        table = StaffMember
+    elif table_name == 'donation':
+        table = Donation
+    if table.objects.filter(pk=pri_k):
+        item = table.objects.get(pk=pri_k)
+        item.delete()
+        messages.success(request, "Item successfully removed")
+        return redirect('table', table_name=table_name)
+    else:
+        messages.error(request, "Item could not be removed")
+        return redirect('table', table_name=table_name)
+    return render(request, "table.html", {'table_name': table_name, 'pri_k': pri_k, 'object': item})
+
+
+def search(request, table_name):
+    table_name = table_name
+    items = None
+    if request.method == "GET":
+        to_find = request.GET['to_find']
+        if table_name == 'donor':
+            items = Donor.objects.filter(
+                Q(donor_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
+                    last_name__icontains=to_find) | Q(blood_type__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
+                    health_interview__icontains=to_find))
+        elif table_name == 'volunteer':
+            items = Volunteer.objects.all().values()
+            items = Volunteer.objects.filter(
+                Q(volunteer_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
+                    last_name__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
+                    training__icontains=to_find))
+        elif table_name == 'patient':
+            items = Patient.objects.all().values()
+            items = Patient.objects.filter(
+                Q(patient_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
+                    last_name__icontains=to_find) | Q(blood_type__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(doctor_name__icontains=to_find) | Q(
+                    medical_need__icontains=to_find))
+        elif table_name == 'staffmember':
+            items = StaffMember.objects.all().values()
+            items = StaffMember.objects.filter(
+                Q(staff_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
+                    last_name__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
+                    position__icontains=to_find) | Q(hours__icontains=to_find) | Q(salary__icontains=to_find) | Q(bloodbank_name__icontains=to_find))
+        elif table_name == 'donation':
+            items = Donation.objects.all().values()
+            items = Donation.objects.filter(
+                Q(donation_id__icontains=to_find) | Q(donor__icontains=to_find) | Q(
+                    volunteer__icontains=to_find) | Q(blood_type__icontains=to_find) | Q(
+                    staff__icontains=to_find) | Q(date_received__icontains=to_find))
+        items_list = list(items.values())
+        return render(request, "search.html", {"table_name": table_name, "to_find": to_find, 'objects': items_list})
+    else:
+        return render(request, "search.html", {"table_name": table_name})

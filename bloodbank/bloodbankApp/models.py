@@ -1,5 +1,6 @@
 from django.core.validators import *
 from django.db import models
+from django_cryptography.fields import encrypt
 
 BLOOD_TYPES = [
     ('A+', 'A+'),
@@ -39,7 +40,7 @@ class Donor(models.Model):
     blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
-    address = models.CharField(max_length=45)
+    address = encrypt(models.CharField(max_length=45))
     health_interview = models.BooleanField(choices=YES_NO_CHOICE)
 
     class Meta:
@@ -52,7 +53,7 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=45)
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
-    address = models.CharField(max_length=45)
+    address = encrypt(models.CharField(max_length=45))
     training = models.BooleanField(choices=YES_NO_CHOICE)
 
     class Meta:
@@ -67,7 +68,7 @@ class Patient(models.Model):
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
     doctor_name = models.CharField(max_length=45)
-    medical_need = models.CharField(max_length=500)
+    medical_need = encrypt(models.CharField(max_length=500))
 
     class Meta:
         db_table = 'Patient'
@@ -79,7 +80,7 @@ class StaffMember(models.Model):
     last_name = models.CharField(max_length=45)
     email = models.EmailField()
     phone_num = models.CharField(max_length=45)
-    address = models.CharField(max_length=45)
+    address = encrypt(models.CharField(max_length=45))
     position = models.CharField(max_length=45)
     hours = models.IntegerField(validators=[MinValueValidator(10), MaxValueValidator(60)])
     salary = models.IntegerField(validators=[MinValueValidator(15000), MaxValueValidator(500000)])
@@ -99,14 +100,3 @@ class Donation(models.Model):
 
     class Meta:
         db_table = 'Donation'
-
-
-# class Receives(models.Model): come back
-
-class Login(models.Model):
-    username = models.CharField(max_length=45, primary_key=True)
-    password = models.CharField(max_length=45)
-    staff = models.ForeignKey(StaffMember, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'Login'

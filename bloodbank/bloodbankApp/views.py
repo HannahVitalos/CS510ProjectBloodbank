@@ -24,14 +24,14 @@ def signin(request):
             fname = user.first_name
             return render(request, "bloodbankApp/index.html", {"fname": fname})
         else:
-            #messages.error(request, "Login failed: invalid username or password")
+            # messages.error(request, "Login failed: invalid username or password")
             redirect('home')
     return render(request, "login.html")
 
 
 def signout(request):
     logout(request)
-    #message success here
+    # message success here
     return redirect('home')
 
 
@@ -120,16 +120,43 @@ def patient(request):
             email = p_form.cleaned_data['email']
             phone = p_form.cleaned_data['phone_num']
             doctor = p_form.cleaned_data['doctor_name']
-            notes = p_form.cleaned_data['medical_notes']
+            notes = p_form.cleaned_data['medical_need']
             new_patient = Patient(first_name=fname, last_name=lname, blood_type=blood, email=email, phone_num=phone,
-                                  doctor_name=doctor, medical_notes=notes)
+                                  doctor_name=doctor, medical_need=notes)
             new_patient.save()
-            return HttpResponseRedirect('/volunteersignup?submitted=True')
+            return HttpResponseRedirect('/addpatient?submitted=True')
     else:
         p_form = PatientForm
         if 'submitted' in request.GET:
             submitted = True
     return render(request, "bloodbankApp/patient.html", {'form': p_form, 'submitted': submitted})
+
+
+@login_required
+def staff(request):
+    submitted = False
+    if request.method == "POST":
+        s_form = StaffMemberForm(request.POST)
+        if s_form.is_valid():
+            fname = s_form.cleaned_data['first_name']
+            lname = s_form.cleaned_data['last_name']
+            email = s_form.cleaned_data['email']
+            phone = s_form.cleaned_data['phone_num']
+            address = s_form.cleaned_data['address']
+            position = s_form.cleaned_data['position']
+            hours = s_form.cleaned_data['hours']
+            salary = s_form.cleaned_data['salary']
+            bank_name = s_form.cleaned_data['bloodbank_name']
+            staff = StaffMember(first_name=fname, last_name=lname, email=email, phone_num=phone,
+                                address=address, position=position, hours=hours, salary=salary,
+                                bloodbank_name=bank_name)
+            staff.save()
+            return HttpResponseRedirect('/addstaffmember?submitted=True')
+    else:
+        s_form = StaffMemberForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, "bloodbankApp/staffmember.html", {'sForm': s_form, 'submitted': submitted})
 
 
 @login_required
@@ -216,7 +243,8 @@ def search(request, table_name):
                 Q(staff_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
                     last_name__icontains=to_find) | Q(
                     email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
-                    position__icontains=to_find) | Q(hours__icontains=to_find) | Q(salary__icontains=to_find) | Q(bloodbank_name__icontains=to_find))
+                    position__icontains=to_find) | Q(hours__icontains=to_find) | Q(salary__icontains=to_find) | Q(
+                    bloodbank_name__icontains=to_find))
         elif table_name == 'donation':
             items = Donation.objects.all().values()
             items = Donation.objects.filter(

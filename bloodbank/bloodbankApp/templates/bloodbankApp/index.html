@@ -9,7 +9,7 @@
 <body>
 <h1 align="center">Welcome to Hypothetical Blood Donation Service</h1>
 {% if user.is_authenticated %}
-    <h1 align="center">Welcome back, {{ fname }}</h1>
+    <h1 align="center">Welcome back {{ fname }}</h1>
     <div align="center">
         <button class="vol-btn" type="submit"><a href="/table/volunteer">View Volunteers</a> </button>
         <button class="donor-btn" type="submit"><a href="/table/donor">View Donors</a> </button>
@@ -18,9 +18,11 @@
         <button class="vol-btn" type="submit"><a href="/table/staffmember">View Staff Members</a> </button>
     </div>
     <div align="center">
+        <button class="vol-btn" type="submit"><a href="/volunteersignup">Add Volunteers</a> </button>
+        <button class="donor-btn" type="submit"><a href="/donorsignup">Add Donors</a> </button>
         <button class="vol-btn" type="submit"><a href="/addpatient">Add Patients</a> </button>
         <button class="donor-btn" type="submit"><a href="/adddonation">Add Donations</a> </button>
-        <button class="vol-btn" type="submit"><a href="/table/staffmember">Add Staff Members</a> </button>
+        <button class="vol-btn" type="submit"><a href="/addstaffmember">Add Staff Members</a> </button>
     </div>
     <div align="center">
         <button type="submit"><a href='/logout'>Log Out</a> </button>

@@ -75,6 +75,7 @@ class StaffMemberForm(ModelForm):
     class Meta:
         model = StaffMember
         fields = ('first_name', 'last_name', 'email', 'phone_num', 'address', 'position', 'hours', 'salary', 'bloodbank_name')
+        bloodbank_name: forms.ModelChoiceField(queryset=BloodBank.objects.all().values())
         labels = {
             'first_name': '',
             'last_name': '',
@@ -83,8 +84,7 @@ class StaffMemberForm(ModelForm):
             'address': '',
             'position': '',
             'hours': '',
-            'salary': '',
-            'bloodbank_name': ''
+            'salary': ''
         }
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
@@ -95,7 +95,6 @@ class StaffMemberForm(ModelForm):
             'position': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Employee Position'}),
             'hours': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Weekly Hours'}),
             'salary': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Employee Salary'}),
-            'bloodbank_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Employee Bloodbank'}),
         }
 
 

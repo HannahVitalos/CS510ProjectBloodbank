@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Staff Member</title>
+</head>
+<body>
+<h1 align="center">Add a new staff member at Hypothetical Bloodbank</h1>
+<br/><br/>
+{% if submitted %}
+    Staff Member successfully added to database.
+{% else %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ sForm.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+{% endif %}
+<div>
+    <button type="submit"><a href='/'>Return Home</a> </button>
+</div>
+</body>
+</html>

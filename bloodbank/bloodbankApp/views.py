@@ -41,6 +41,24 @@ def index(request):
     return render(request, "bloodbankApp/index.html", {'bloodbank': bloodbank, 'hours': hours})
 
 
+@login_required
+def show_table(request, table_name):
+    table = table_name
+    objects = None
+    if table == 'donor':
+        objects = Donor.objects.all()
+    elif table == 'volunteer':
+        objects = Volunteer.objects.all()
+    elif table == 'patient':
+        objects = Patient.objects.all()
+    elif table == 'staffmember':
+        objects = StaffMember.objects.all()
+    elif table == 'donation':
+        objects = Donation.objects.all()
+    objects_list = list(objects.values())
+    return render(request, "bloodbankApp/table.html", {'table_name': table_name, 'objects': objects_list})
+
+
 def donorSign(request):
     submitted = False
     if request.method == "POST":

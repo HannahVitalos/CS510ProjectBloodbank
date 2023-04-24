@@ -7,14 +7,19 @@
 <body>
 <h1 align="center">Volunteer at Hypothetical Bloodbank!</h1>
 <br/><br/>
-{ % if submitted % }
+{% if submitted %}
     Congratulations! You have signed up to volunteer.
-{ % else % }
-    <form action="" method="post">
+{% else %}
+    <div align="center">
+        <form action="" method="post">
         {% csrf_token %}
         {{ volForm.as_p }}
         <input type="submit" value="Submit">
     </form>
-{ % endif % }
+    </div>
+{% endif %}
+<div align="center">
+    <button type="submit"><a href='/'>Return Home</a> </button>
+</div>
 </body>
 </html>

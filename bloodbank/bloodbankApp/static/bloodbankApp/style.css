@@ -39,3 +39,25 @@ justify-content: space-evenly;
 top: 75%;
 left: 43%;
 }
+
+#boxes {
+content: "";
+display: table;
+clear: both;
+}
+
+div{
+float: left;
+height: 470px;
+width: 23%;
+padding: 0 10px;
+}
+#column1 {
+background-color: white
+}
+#column2 {
+background-color: white
+}
+#column3 {
+background-color: white
+}

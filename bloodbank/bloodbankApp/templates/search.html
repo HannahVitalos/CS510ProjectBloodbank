@@ -24,7 +24,9 @@
         </tr>
     {% endfor %}
     </table>
-    <button type="submit"><a href='/'>Return Home</a> </button>
+    <div align="center">
+            <button type="submit"><a href='/'>Return Home</a> </button>
+    </div>
 {% else %}
     <h1 align="center">There were no items in {{ table_name }} matching "{{ to_find }}"</h1>
 {% endif %}

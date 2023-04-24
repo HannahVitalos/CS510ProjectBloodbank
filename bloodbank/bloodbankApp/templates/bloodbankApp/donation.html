@@ -9,13 +9,15 @@
 {% if submitted %}
     Donation has successfully been entered into the database.
 {% else %}
-    <form action="" method="post">
+    <div align="center">
+        <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit">
     </form>
+    </div>
 {% endif %}
-<div>
+<div align="center">
     <button type="submit"><a href='/'>Return Home</a> </button>
 </div>
 </body>

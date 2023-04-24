@@ -25,10 +25,12 @@
         <button class="vol-btn" type="submit"><a href="/addstaffmember">Add Staff Members</a> </button>
     </div>
     <div align="center">
+        <button type="submit"><a href='/admin'>Admin</a> </button>
         <button type="submit"><a href='/logout'>Log Out</a> </button>
     </div>
 {% else %}
-    <div align="left">
+<main id="boxes">
+        <div id="column1" align="left">
         <h4 align="left">Contact Information</h4>
             <table border="1">
                 <tr>
@@ -43,7 +45,7 @@
                 </tr>
             </table>
     </div>
-    <div align="center">
+    <div id="column2" align="center">
     <h4 align="center">Our Hours</h4>
         <table border="1">
             <tr>
@@ -58,7 +60,7 @@
                 </tr>
         </table>
     </div>
-    <div align="right">
+    <div id="column3" align="right">
         <h4 align="right">Locations</h4>
         <table border="1">
             <tr>
@@ -71,6 +73,7 @@
                 </tr>
         </table>
     </div>
+</main>
     <div class="signups">
         <button class="vol-btn" type="submit"><a href="/volunteersignup">Volunteer Sign Up</a> </button>
         <button class="donor-btn" type="submit"><a href="/donorsignup">Donor Sign Up</a> </button>

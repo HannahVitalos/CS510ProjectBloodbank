@@ -221,28 +221,27 @@ def search(request, table_name):
             items = Donor.objects.filter(
                 Q(donor_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
                     last_name__icontains=to_find) | Q(blood_type__icontains=to_find) | Q(
-                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(
                     health_interview__icontains=to_find))
         elif table_name == 'volunteer':
             items = Volunteer.objects.all().values()
             items = Volunteer.objects.filter(
                 Q(volunteer_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
                     last_name__icontains=to_find) | Q(
-                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(
                     training__icontains=to_find))
         elif table_name == 'patient':
             items = Patient.objects.all().values()
             items = Patient.objects.filter(
                 Q(patient_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
                     last_name__icontains=to_find) | Q(blood_type__icontains=to_find) | Q(
-                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(doctor_name__icontains=to_find) | Q(
-                    medical_need__icontains=to_find))
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(doctor_name__icontains=to_find))
         elif table_name == 'staffmember':
             items = StaffMember.objects.all().values()
             items = StaffMember.objects.filter(
                 Q(staff_id__icontains=to_find) | Q(first_name__icontains=to_find) | Q(
                     last_name__icontains=to_find) | Q(
-                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(address__icontains=to_find) | Q(
+                    email__icontains=to_find) | Q(phone_num__icontains=to_find) | Q(
                     position__icontains=to_find) | Q(hours__icontains=to_find) | Q(salary__icontains=to_find) | Q(
                     bloodbank_name__icontains=to_find))
         elif table_name == 'donation':

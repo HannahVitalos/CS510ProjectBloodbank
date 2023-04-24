@@ -6,11 +6,15 @@
 </head>
 <body>
 <h1 align="center">Update {{ table_name }} ID {{ pri_k }}</h1>
-    <form action="" method="post">
+    <div align="center">
+        <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit">
     </form>
-    <button type="submit"><a href='/'>Return Home</a> </button>
+    </div>
+    <div align="center">
+            <button type="submit"><a href='/'>Return Home</a> </button>
+    </div>
 </body>
 </html>
